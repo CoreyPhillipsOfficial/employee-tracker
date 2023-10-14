@@ -2,8 +2,8 @@
 
 ## The Employee Tracker is a command line application that was built with Node.js and MySQL. It allows the user to manage employee data within a business. Within this applicationm the user can view, update, and delete departments, roles, and employees. The Employee Tracker lets the user easily track and organize the structure of a company, making it a powerful tool for business owners and managers.
 
-![Screenshot](../assets/screenshot_home.png)
-![Screenshot](../assets/screenshot_viewdepartments.png)
+![Screenshot](./assets/screenshot_home.png)
+![Screenshot](./assets/screenshot_viewdepartments.png)
 
 
 ## Installation
