@@ -14,38 +14,62 @@ function menu() {
             type: 'list',
             name: 'choices',
             message: 'What would you like to do?',
-            // make into object
-            // {
-            //     name: "View All Employees",
-            //     value: "VIEW_EMPLOYEES"
-            //   },
-            choices: ['View all departments', 'View all roles', 'View all employees', 'add_department', 'Add a role', 'Add an employee', 'Update an employee role\n']
-        }).then((answer) => {
+            choices: [{
+                name: 'View All Departments',
+                value: 'view_all_departments'
+            },
+            {
+                name: 'View All Roles',
+                value: 'view_all_roles'
+            },
+            {
+                name: 'View All Employees',
+                value: 'view_all_employees'
+            },
+            {
+                name: 'Add Department',
+                value: 'add_department'
+            },
+            {
+                name: 'Add Role',
+                value: 'add_role'
+            },
+            {
+                name: 'Add Employee',
+                value: 'add_employee'
+            },
+            {
+                name: 'Update Employee',
+                value: 'update_employee'
+            },
+            ],
+        })
+        .then((answer) => {
             let list = answer.choices
             switch (list) {
-                case 'View all departments':
+                case 'view_all_departments':
                     viewDepartments();
                     break;
-                case 'View all roles':
+                case 'view_all_roles':
                     viewRoles();
                     break;
-                case 'View all employees':
+                case 'view_all_employees':
                     viewEmployees();
                     break;
                 case 'add_department':
                     addDepartment();
                     break;
-                case 'Add a role':
+                case 'add_role':
                     addRole();
                     break;
-                case 'Add an employee':
+                case 'add_employee':
                     addEmployee();
                     break;
-                case 'Update an employee role':
+                case 'update_employee':
                     updateEmployee();
                     break;
             };
-        });
+        })
 };
 
 function viewDepartments() {
@@ -79,6 +103,49 @@ function addDepartment() {
         ('${departmentName}')
         `, function (err, res) {
             err ? console.log(err) : viewDepartments(), init()
+        })
+    })
+};
+
+function addRole() {
+    db.query('select * from department', function (err, res) {
+        if (err) {
+            console.log('err')
+            init()
+        }
+        const listDepartments = res.map((department) => ({
+            value: department.department_id,
+            name: department.department_name,
+        }))
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'department_list',
+                message: 'What department will this role belong to?',
+                choices: listDepartments
+
+            },
+            {
+                type: 'input',
+                name: 'role_name',
+                message: 'What role would you like to add?'
+
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'What is the salary of this role?'
+            }
+        ]).then((response) => {
+            let departmentName = response.department_list;
+            let roleName = response.role_name;
+            let salary = response.salary;
+
+            db.query(`insert into role (title, salary, department_id)
+            values ('${roleName}', '${salary}', '${departmentName}')
+            `, function (err, res) {
+                err ? console.log(err) : viewRoles(), init()
+            })
         })
     })
 }
